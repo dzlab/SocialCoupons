@@ -1,0 +1,14 @@
+application: social-coupons
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /img
+  static_dir: www/views/img
+
+- url: /css
+  static_dir: www/views/css
+  
+- url: /.*
+  script: main.py

@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>Social Coupons</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" data-theme="b">
+
+	<div data-role="header" data-theme="b">
+		<a href="#" data-icon="back" data-rel="back">Back</a>
+		<h1>Social Coupons</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		
+	{% if deals %}
+		<ul data-role="listview" data-inset="true" data-filter="true">
+		{% for deal in deals %}
+			<li>
+<!--<img src="{{deal.image}}" width="190" height="127" alt=""/>-->			
+			<a href="{{deal.link}}" id="{{deal.url}}">{{deal.extra}}</a>
+			Prix original: {{deal.orignalPrice}}<BR />
+			Prix de l'offre: {{deal.currentPrice}}
+			</li>
+		{% endfor %}
+		</ul>
+	
+	{% else %}
+		<form action="/search" method="post"> 
+			<div><input type="text" name="query" id="basic" data-mini="true" />
+			<input type="submit" value="Go"></div>
+		</form>
+	{% endif %}
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-theme="b">		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="search">Search</a></li>
+				<li><a href="navigate">Navigate</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!-- /page -->	
+</body>
+</html>
