@@ -1,0 +1,32 @@
+Search Engine for Coupons ()
+
+* The Idea
+
+This work intend to create a social layer above a search engine that crawls and aggregate a couple of collective or group buying sites.
+The added value of the idea is to bring a social experience to users when looking for coupons. 
+This experience is provided by allowing user to request his/her friend opinion about a particular set of coupons, or by notifying him that a friend or a contact did take a particular coupon.
+
+For more information about collective buying sites, please visit http://en.wikipedia.org/wiki/Group_buying
+
+
+* Implementation
+The project code consists of two elements:
+- A web application based on jQuery mobile for user interface and Webapp2 web framework for the server side. It is a Google App Engine (Python 2.7) project.
+- A python client program that crawlers a collective buying site and upload a list of coupons with their detailled information (title, category, original and current price, ...). 
+
+After crawling the site, the client send data to the server that will index them and store them to allow users searching for coupons by sending queries to the server via a search interface.
+
+* Usage
+
+To run the project locally, you need: Google App Engine SDK, Python 2.7 version
+
+In your terminal::
+
+$ git clone https://github.com/soufy/SocialCoupons.git
+$ cd SocialCoupons
+
+Then open the GAE Launcher, import the project, and click Run. Go to http://127.0.0.1:8080 to see it running.
+
+* To Do
+
+A good thins to do next is to integrate socail network site (e.g. Twitter) to import user contacts and enhance the search engine algorithm to have better result quality and performance.
