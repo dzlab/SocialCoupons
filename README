@@ -1,4 +1,4 @@
-Search Engine for Coupons ()
+Search Engine for Coupons 
 
 * The Idea
 
@@ -26,6 +26,7 @@ $ git clone https://github.com/soufy/SocialCoupons.git
 $ cd SocialCoupons
 
 Then open the GAE Launcher, import the project, and click Run. Go to http://127.0.0.1:8080 to see it running.
+After that, you should fill the server database with coupons, for that you need to run CrawlerClient.py
 
 * To Do
 
