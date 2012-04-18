@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Collaborative Search tool</title> 
+	<title>Social Coupons</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
@@ -20,7 +20,7 @@
 	{% if deals %}
 		<ul data-role="listview" data-inset="true" data-filter="true">
 		{% for deal in deals %}
-			<li><a href="{{deal.link}}">{{deal.extra}}</a></li>
+			<li><a href="{{deal.link}}" style="white-space:normal">{{deal.extra}}</a></li>
 		{% endfor %}
 		</ul>
 	{% else %}
@@ -32,7 +32,6 @@
 		</ul>
 		{% else %}
 			<form action="/search" method="post"> 
-				<label for="basic">URL:</label>
 				<div><input type="text" name="query" id="basic" data-mini="true" />
 				<input type="submit" value="Go"></div>
 			</form>
@@ -46,6 +45,7 @@
 			<ul>
 				<li><a href="search">Search</a></li>
 				<li><a href="navigate">Navigate</a></li>
+				<li><a href="advice">Advice</a></li>
 			</ul>
 		</div><!-- /navbar -->
 	</div><!-- /footer -->

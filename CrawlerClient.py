@@ -5,59 +5,60 @@
 import urllib2
 import json
 import httplib, urllib
-#from bs4 import BeautifulSoup
+
+# upload crawled deals to the web server
+def upload(url, deals):
+	params = urllib.urlencode({'deals': deals})
+	headers = {"Content-type": "application/x-www-form-urlencoded",
+    	       "Accept": "text/plain"}
+	conn = httplib.HTTPConnection(url)
+	conn.request("POST", "/manage", params, headers)
+	response = conn.getresponse()
+	print response.status, response.reason
+	data = response.read()
+	print 'Server response: ' + data
+	conn.close()
+	
+# crawl local deals for a given city
+def crawlLocalDeals(url):
+	page = urllib2.urlopen(url)
+	html = page.read()
+	stBracket = html.find('[', html.find('itemsLocalDeals = '))
+	ndBracket = html.find(']', stBracket)
+	content = html[stBracket: ndBracket+1]
+	return content
 
 #page = urllib2.urlopen("http://www.groupon.fr/all-deals/paris")
-page = urllib2.urlopen("http://www.groupon.fr/all-deals/tarbes")
-#soup = BeautifulSoup(page)
-html = page.read()
-stBracket = html.find('[', html.find('itemsLocalDeals = '))
-ndBracket = html.find(']', stBracket)
-localDeals = html[stBracket: ndBracket+1]
-deals = json.loads(localDeals)
 
-print jstr[0]['category']
-print 'http://www.groupon.fr' + jstr[0]['dealPermaLink']
-print jstr[0]['dealPrice']
-print jstr[0]['imageUrl']
-print jstr[0]['dealTitleTruncated']
-print jstr[0]['cityUrlName']
-print jstr[0]['dealTitle']
-print jstr[0]['dealId']
-print jstr[0]['dealOldPrice']
-"""
-index = {}
-def filter_keyword(keyword):
-	blacklist = ['ces','sans', 'all', 'eux', 'pas', 'une', 'vos', 'des', 'avec', 'ses', 'ces', ]
-	if len(keyword)<3 or keyword.lower() in blacklist:
-		return False
-	if keyword.isalpha():
-		return True
-	return False
+# crawl all cities where we can find groupon local deals
+def crawlCities():
+	cities = {}
+	page = urllib2.urlopen("http://www.groupon.fr/")
+	html = page.read()
+	start = html.find('<ul id="jCitiesSelectBox">')
+	end = html.find('</ul>', start)
+	while start < end:
+		stQuote = html.find('\'', start)
+		if stQuote > end:
+			break
+		ndQuote = html.find('\'', stQuote+1)
+		url = html[stQuote+1:ndQuote]
+		stSpan = html.find('<span>', ndQuote)
+		ndSpan = html.find('</span>', ndQuote)
+		offset = len('<span>')
+		city = html[stSpan+offset:ndSpan]
+		cities[city] = url
+		start = html.find('</li>', start+1)
+	return cities
 
-for d in deals:
-	link = 'http://www.groupon.fr' + d['dealPermaLink']
-	keywords = d['dealTitle'].split()
-	for keyword in keywords:
-		if filter_keyword(keyword):
-			if keyword in index:
-				index[keyword.lower()].append([link, 0])
-			else:
-				index[keyword.lower()] = [[link, 0]]
-"""
-params = urllib.urlencode({'deals': localDeals})
-headers = {"Content-type": "application/x-www-form-urlencoded",
-           "Accept": "text/plain"}
-conn = httplib.HTTPConnection("localhost:8080")
-conn.request("POST", "/manage", params, headers)
-response = conn.getresponse()
-print response.status, response.reason
-
-data = response.read()
-data
-
-conn.close()
-
-#f = open('C:\\Dev\\udacity\\deal_jsonarray.txt', 'rb')
-#tmp = f.read()
-#deals = json.loads(tmp)
+# main code
+# crawl cities, then for each one crawl its local deals and upload them to the server
+number = 0
+cities = crawlCities()
+for city in cities:
+	number = number + 1
+	url = cities[city]
+	url = url.replace('deals', 'all-deals')
+	localDeals = crawlLocalDeals(url)
+	upload("localhost:8080", localDeals)
+	print 'Uploading local deals for ' + city + ' ('+str(number)+' of '+str(len(cities))+' cities) ... DONE'
