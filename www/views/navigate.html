@@ -20,7 +20,15 @@
 	{% if deals %}
 		<ul data-role="listview" data-inset="true" data-filter="true">
 		{% for deal in deals %}
-			<li><a href="{{deal.link}}" style="white-space:normal">{{deal.extra}}</a></li>
+			<li>
+				<!--<a href="{{deal.link}}" style="white-space:normal">{{deal.extra}}</a>-->
+				<a href="{{deal.link}}" style="white-space:normal">
+					<h3>{{deal.extra}}</h3>
+					<p>Prix original: {{deal.orignalPrice}}</p>
+					<span class="ui-li-count">{{deal.currentPrice}}</span>
+				</a>
+			</li>
+			
 		{% endfor %}
 		</ul>
 	{% else %}

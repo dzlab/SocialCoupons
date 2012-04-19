@@ -1,5 +1,6 @@
 from google.appengine.ext import webapp
 from www.models.deal import *
+import logging
 
 import json
 
@@ -24,8 +25,13 @@ class Manager(webapp.RequestHandler):
         
         deals = json.loads(self.request.get('deals'))
         for d in deals:
-            category_name = d['category']
             identifier = d['dealId']
+            if identifier in Deals.identfiers:
+                logging.info('Deal with ID ' + str(identifier) + ' already stored')
+                continue
+            else:
+                Deals.identfiers.append(identifier)
+            category_name = d['category']
             deal = Deal(parent=category_key(category_name))    
             deal.category = category_name    
             deal.image = d['imageUrl']
@@ -41,10 +47,11 @@ class Manager(webapp.RequestHandler):
             keywords = d['dealTitle'].split()
             for keyword in keywords:
                 if filter_keyword(keyword):
+                    word = keyword.lower()
                     if keyword in Deals.index:
-                        Deals.index[keyword.lower()].append([identifier, 0])
+                        Deals.index[word].append(identifier)
                     else:
-                        Deals.index[keyword.lower()] = [[identifier, 0]]
+                        Deals.index[word] = [identifier]
         
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.out.write('Deals stored successfully into local database!')

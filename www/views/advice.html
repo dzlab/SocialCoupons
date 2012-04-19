@@ -22,9 +22,11 @@
 		{% for deal in deals %}
 			<li>
 <!--<img src="{{deal.image}}" width="190" height="127" alt=""/>-->			
-			<a href="{{deal.link}}" id="{{deal.url}}">{{deal.extra}}</a>
-			Prix original: {{deal.orignalPrice}}<BR />
-			Prix de l'offre: {{deal.currentPrice}}
+				<a href="{{deal.link}}" style="white-space:normal">
+					<h3>{{deal.extra}}</h3>
+					<p>Prix original: {{deal.orignalPrice}}</p>
+					<span class="ui-li-count">{{deal.currentPrice}}</span>
+				</a>
 			</li>
 		{% endfor %}
 		</ul>

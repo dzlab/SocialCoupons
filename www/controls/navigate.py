@@ -20,8 +20,9 @@ class Navigator(webapp2.RequestHandler):
         template_values = {}
         if self.request.get('category'):
             category_name = self.request.get('category')
-            deals_query= Deal.all().ancestor(category_key(category_name)).order('-date')
-            template_values['deals'] = deals_query.fetch(10000)
+            deals_query = Deal.all().ancestor(category_key(category_name)).order('-date')
+            
+            template_values['deals'] = deals_query.fetch(1000)
         else:
             deals = Deal.all().fetch(10000)
             categories = []

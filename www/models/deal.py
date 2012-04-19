@@ -6,6 +6,7 @@ class Deals:
     """Static variable holding index information"""
     index = {} #Index over the stored data of the form {'word':[[deal_identifier, number_of_user_clicks],[]],..} 
     cache = {} #a cache to hold clicked URLs to give them first as a response for subsequent queries
+    identfiers = [] #list of all identifiers stored in the database
 
 """A method to build the search index and stored in memory for accelerating search algorithm"""
 def build_index():
@@ -16,10 +17,11 @@ def build_index():
         keywords = deal.extra.split()
         for keyword in keywords:
             if filter_keyword(keyword):
+                word = keyword.lower()
                 if keyword in Deals.index:
-                    Deals.index[keyword.lower()].append(deal.identifier)
+                    Deals.index[word].append(deal.identifier)
                 else:
-                    Deals.index[keyword.lower()] = [deal.identifier]
+                    Deals.index[word] = [deal.identifier]
     return Deals.index
     
 """A method used to refine search by returning identifiers of deals that are indexed by at least 'limit' word"""
@@ -99,13 +101,14 @@ def category_key(category_name=None):
 
 """A method for filtering unwanted words, return False if word is unwanted, True otherwise"""
 def filter_keyword(keyword):
-    blacklist = ['ces','sans', 'all', 'eux', 'pas', 'une', 'vos', 'des', 'avec', 'ses', 'ces', ]
+    blacklist = ['ces','sans', 'all', 'eux', 'pas', 'une', 'vos', 'des', 'avec', 'ses', 'ces']
     if len(keyword)<3 or keyword.lower() in blacklist:
         return False
     if keyword.isalpha():
         return True
-    return False
+    return True
 
+"""Remove unwanted characters from a word"""
 
 """ A method to find deals for a given list of deal identifiers """
 def get_deals(identifiers):
